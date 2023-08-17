@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シューティングゲーム</title>
+    <style>
+        #gameArea {
+            width: 800px;
+            height: 600px;
+            position: relative;
+            border: 1px solid black;
+        }
+
+        .enemy {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            background-color: red;
+            border-radius: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="gameArea"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const gameArea = document.getElementById('gameArea');
+
+            function createEnemy() {
+                const enemy = document.createElement('div');
+                enemy.classList.add('enemy');
+
+                // 位置をランダムに決定
+                const x = Math.random() * (gameArea.offsetWidth - 50);
+                const y = Math.random() * (gameArea.offsetHeight - 50);
+                enemy.style.left = x + 'px';
+                enemy.style.top = y + 'px';
+
+                // クリックしたら敵を消すイベント
+                enemy.addEventListener('click', function () {
+                    gameArea.removeChild(enemy);
+                });
+
+                gameArea.appendChild(enemy);
+            }
+
+            // クリックするたびに新しい敵を追加
+            gameArea.addEventListener('click', function () {
+                createEnemy();
+            });
+
+            // 最初の敵を作成
+            createEnemy();
+        });
+
+    </script>
+</body>
+
+</html>
