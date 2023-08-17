@@ -17,6 +17,11 @@
             bg.graphics.beginFill("black").drawRect(0,0,960,540)//(0,0)〜(960,540)までを黒い画面にする
             stage.addChild(bg)
 
+            let player = new createjs.Shape()
+            player.graphics.beginFill("white").drawCircle(100,100,10)
+            stage.addChild(player)
+
+
             stage.update()
         }
     </script>
