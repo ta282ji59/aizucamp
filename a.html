@@ -28,6 +28,12 @@
             player.graphics.beginFill("white").drawCircle(0, 0, 10)
             stage.addChild(player)
 
+            let titleText = new createjs.Text("ゲーム", "40px	sans-serif", "white");//タイトル画面
+            titleText.x = 480;//どの位置に表示するのか?(x)
+            titleText.y = 250;//どの位置に表示するのか?(y)
+            titleText.textAlign = "center"
+            stage.addChild(titleText);
+
             stage.addEventListener("click", handleClick)//クリックした際、handleClick関数を実行
 
             createjs.Ticker.setFPS(60)//１秒間に60回の画面更新を行う
@@ -66,10 +72,10 @@
                 for (let i = 0; i < enemyList.length; i++)enemyList[i].y += 2//敵の移動
                 for (let i = 0; i < bulletList.length; i++) bulletList[i].y -= 10//弾の移動
 
-                for (let i = 0; i < enemyList.length; i++) {//プレイヤーが敵に触れてしまった(要は同じ座標上に位置してしまった)らgameoverする処理
-                    let localPoint = enemyList[i].globalToLocal(player.x, player.y)//playerの座標を取得?
-                    if (enemyList[i].hitTest(localPoint.x, localPoint.y)) gameOver()//敵のいづれかに触れたらgameOver関数に移動
-                }
+                // for (let i = 0; i < enemyList.length; i++) {//プレイヤーが敵に触れてしまった(要は同じ座標上に位置してしまった)らgameoverする処理
+                //     let localPoint = enemyList[i].globalToLocal(player.x, player.y)//playerの座標を取得?
+                //     if (enemyList[i].hitTest(localPoint.x, localPoint.y)) gameOver()//敵のいづれかに触れたらgameOver関数に移動
+                // }
 
                 for (let i = 0; i < bulletList.length; i++) {//弾が敵に当たった時の処理
                     for (let j = 0; j < enemyList.length; j++) {
