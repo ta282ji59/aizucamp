@@ -7,22 +7,46 @@
     <title>Document</title>
 </head>
 <body>
-    <canvas id="myCanvas" width="900" height="540"></canvas>
+    <canvas id="myCanvas" width="960" height="540"></canvas>
     <script>
         window.addEventListener("load",init);
         function init(){
             let stage = new createjs.Stage("myCanvas")
+            let count=0
+            let enemyList=[]
 
             let bg = new createjs.Shape()
             bg.graphics.beginFill("black").drawRect(0,0,960,540)//(0,0)〜(960,540)までを黒い画面にする
             stage.addChild(bg)
 
             let player = new createjs.Shape()
-            player.graphics.beginFill("white").drawCircle(100,100,10)
+            player.graphics.beginFill("white").drawCircle(0,0,10)
             stage.addChild(player)
 
+            createjs.Ticker.setFPS(60)//１秒間に60回の画面更新を行う
+            createjs.Ticker.addEventListener("tick",handleTick);
 
-            stage.update()
+            function handleTick(){
+                player.x=stage.mouseX;
+                player.y=stage.mouseY;
+
+                if(count%100===0){
+                    let enemy = new createjs.Shape()
+                    enemy.graphics.beginFill("red").drawCircle(0,0,10)
+                    
+                    enemy.x=960
+                    enemy.y=540*Math.random()
+                    
+                    stage.addChild(enemy)
+                    enemyList.push(enemy)
+                }
+                count++
+
+                stage.update()
+            }
+            
+
+            
         }
     </script>
 </body>
