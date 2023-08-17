@@ -18,9 +18,9 @@
             let enemyList = [];
             let timer = 0;  // Add this line for the timer
 
-            let bg = new createjs.Bitmap("https://cdn.openbloc.fr/2018/04/DRrHqFUW0AAlYcT.jpg-large.jpeg");
-            // let bg = new createjs.Shape();
-            // bg.graphics.beginFill("aqua").drawRect(0, 0, 900, 540);
+            // let bg = new createjs.Bitmap("https://cdn.openbloc.fr/2018/04/DRrHqFUW0AAlYcT.jpg-large.jpeg");
+            let bg = new createjs.Shape();
+            bg.graphics.beginFill("aqua").drawRect(0, 0, 900, 540);
             stage.addChild(bg);
 
             let player = new createjs.Shape();
@@ -49,13 +49,12 @@
                 // Timer increment and display update
                 timer += 1 / 60;  // Increment timer by 1/60th of a second on each tick
                 timerDisplay.text = "Timer: " + timer.toFixed(1) + "s";
-
+                
                 if (enemyCount % 100 === 0) {
-                    let enemy = new createjs.Bitmap("https://illust8.com/wp-content/uploads/2021/10/stealth-fighter_15119.png");
+                    let enemy = new createjs.Bitmap("image/enemy.png");
                     enemy.scaleX = 0.08;
                     enemy.scaleY = 0.08;
-                    // let enemy = new createjs.Shape()
-                    // enemy.graphics.beginFill("red").drawCircle(0,0,10)//円の中心のx座標、ｙ座標、円の半径
+                    
                     enemy.x = 900 * Math.random();
                     enemy.y = 540 * Math.random();
 
@@ -80,12 +79,13 @@
                 
 
 
-                // for (let i = 0; i < enemyList.length; i++) {
-                //     enemyList[i].x += 1 * Math.random();
-                //     enemyList[i].y += 1 * Math.random();
-                //     enemyList[i].x -= 1 * Math.random();
-                //     enemyList[i].y -= 1 * Math.random();
-                // }
+                for (let i = 0; i < enemyList.length; i++) {
+                    enemyList[i].x += 1 * Math.random();
+                    enemyList[i].y += 1 * Math.random();
+                    enemyList[i].x -= 1 * Math.random();
+                    enemyList[i].y -= 1 * Math.random();
+                }
+                
                 stage.update();
             }
         }
