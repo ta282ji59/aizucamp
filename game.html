@@ -25,7 +25,7 @@
 
             let player = new createjs.Shape();
             player.graphics.setStrokeStyle(2)
-                .beginStroke("red")
+                .beginStroke("blue")
                 .drawCircle(0, 0, 20)
                 .moveTo(0, -30)
                 .lineTo(0, 30)
@@ -51,11 +51,11 @@
                 timerDisplay.text = "Timer: " + timer.toFixed(1) + "s";
 
                 if (enemyCount % 100 === 0) {
-                    // let enemy = new createjs.Bitmap("https://illust8.com/wp-content/uploads/2021/10/stealth-fighter_15119.png");
-                    // enemy.scaleX = 0.08;
-                    // enemy.scaleY = 0.08;
-                    let enemy = new createjs.Shape()
-                    enemy.graphics.beginFill("red").drawCircle(0,0,10)//円の中心のx座標、ｙ座標、円の半径
+                    let enemy = new createjs.Bitmap("https://illust8.com/wp-content/uploads/2021/10/stealth-fighter_15119.png");
+                    enemy.scaleX = 0.08;
+                    enemy.scaleY = 0.08;
+                    // let enemy = new createjs.Shape()
+                    // enemy.graphics.beginFill("red").drawCircle(0,0,10)//円の中心のx座標、ｙ座標、円の半径
                     enemy.x = 900 * Math.random();
                     enemy.y = 540 * Math.random();
 
@@ -76,6 +76,8 @@
                     stage.setChildIndex(player, stage.getNumChildren() - 1);
                 }
                 enemyCount++;
+
+                
 
 
                 // for (let i = 0; i < enemyList.length; i++) {

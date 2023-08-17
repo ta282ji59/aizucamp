@@ -13,13 +13,7 @@
             border: 1px solid black;
         }
 
-        .enemy {
-            width: 50px;
-            height: 50px;
-            position: absolute;
-            background-color: red;
-            border-radius: 25px;
-        }
+       
     </style>
 </head>
 
@@ -30,32 +24,40 @@
         document.addEventListener('DOMContentLoaded', function () {
             const gameArea = document.getElementById('gameArea');
 
-            function createEnemy() {
-                const enemy = document.createElement('div');
-                enemy.classList.add('enemy');
+            function createaaa() {
+                const aaa = document.createElement('div');
+                aaa.classList.add('aaa');
 
                 // 位置をランダムに決定
                 const x = Math.random() * (gameArea.offsetWidth - 50);
                 const y = Math.random() * (gameArea.offsetHeight - 50);
-                enemy.style.left = x + 'px';
-                enemy.style.top = y + 'px';
+                aaa.style.left = x + 'px';
+                aaa.style.top = y + 'px';
 
                 // クリックしたら敵を消すイベント
-                enemy.addEventListener('click', function () {
-                    gameArea.removeChild(enemy);
+                aaa.addEventListener('click', function () {
+                    gameArea.removeChild(aaa);
                 });
 
-                gameArea.appendChild(enemy);
+                // 敵のスタイルを設定
+                aaa.style.width = '120px';
+                aaa.style.height = '100px';
+                aaa.style.backgroundImage = "url('https://illust8.com/wp-content/uploads/2021/10/stealth-fighter_15119.png')";
+                aaa.style.backgroundSize = 'cover';
+                aaa.style.position = 'absolute';
+
+                gameArea.appendChild(aaa);
             }
 
             // クリックするたびに新しい敵を追加
             gameArea.addEventListener('click', function () {
-                createEnemy();
+                createaaa();
             });
 
             // 最初の敵を作成
-            createEnemy();
+            createaaa();
         });
+
 
     </script>
 </body>
