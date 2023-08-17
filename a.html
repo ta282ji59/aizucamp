@@ -15,18 +15,20 @@
             let count=0
             let enemyList=[]
 
+            //画面の色を作る
             let bg = new createjs.Shape()
             bg.graphics.beginFill("black").drawRect(0,0,960,540)//(0,0)〜(960,540)までを黒い画面にする
             stage.addChild(bg)
 
+            //プレイヤーを作る
             let player = new createjs.Shape()
             player.graphics.beginFill("white").drawCircle(0,0,10)
             stage.addChild(player)
 
             createjs.Ticker.setFPS(60)//１秒間に60回の画面更新を行う
-            createjs.Ticker.addEventListener("tick",handleTick);
+            createjs.Ticker.addEventListener("tick",handleTick);//マウスを動かす際の処理関数へ移る
 
-            function handleTick(){
+            function handleTick(){//プレイヤーの移動、敵の出現
                 player.x=stage.mouseX;
                 player.y=stage.mouseY;
 
