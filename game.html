@@ -16,14 +16,14 @@
             let stage = new createjs.Stage("myCanvas");
             let enemyCount = 0;
             let enemyList = [];
-            let timer = 0;  // Add this line for the timer
+            let timer = 5;  // タイマーのスタート
 
             // let bg = new createjs.Bitmap("https://cdn.openbloc.fr/2018/04/DRrHqFUW0AAlYcT.jpg-large.jpeg");
             let bg = new createjs.Shape();
             bg.graphics.beginFill("aqua").drawRect(0, 0, 900, 540);
             stage.addChild(bg);
 
-            let player = new createjs.Shape();
+            let player = new createjs.Shape();//エイムを作る
             player.graphics.setStrokeStyle(2)
                 .beginStroke("blue")
                 .drawCircle(0, 0, 20)
@@ -34,7 +34,7 @@
             stage.addChild(player);
 
             // Timer display setup
-            let timerDisplay = new createjs.Text("Timer: 0s", "20px Arial", "black");
+            let timerDisplay = new createjs.Text("Timer: ", "20px Arial", "black");
             timerDisplay.x = 750;  // Adjust position based on the canvas size and desired position
             timerDisplay.y = 10;
             stage.addChild(timerDisplay);
@@ -47,10 +47,10 @@
                 player.y = stage.mouseY;
 
                 // Timer increment and display update
-                timer += 1 / 60;  // Increment timer by 1/60th of a second on each tick
+                timer -= 1 / 60;  // Increment timer by 1/60th of a second on each tick
                 timerDisplay.text = "Timer: " + timer.toFixed(1) + "s";
                 
-                if (enemyCount % 100 === 0) {
+                if (enemyCount % 50 === 0||enemyCount===0||enemyCount===1||enemyCount===2) {
                     let enemy = new createjs.Bitmap("image/enemy.png");
                     enemy.scaleX = 0.08;
                     enemy.scaleY = 0.08;
@@ -68,6 +68,7 @@
                         if (index !== -1) {
                             enemyList.splice(index, 1);
                         }
+                        
                     });
 
                     stage.addChild(enemy);
@@ -76,9 +77,6 @@
                 }
                 enemyCount++;
 
-                
-
-
                 for (let i = 0; i < enemyList.length; i++) {
                     enemyList[i].x += 1 * Math.random();
                     enemyList[i].y += 1 * Math.random();
@@ -86,6 +84,9 @@
                     enemyList[i].y -= 1 * Math.random();
                 }
                 
+
+                
+
                 stage.update();
             }
         }
