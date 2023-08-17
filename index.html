@@ -72,8 +72,9 @@
 
                     player.x=stage.mouseX//x軸の移動
                     player.y=stage.mouseY//y軸の移動
-
+                    console.log(count)
                     if(count%100===0){//countを0から∞まで増やしていき、100で割った際、あまりが０になった際に敵(enemy)を表示する
+                        
                         let enemy = new createjs.Shape()
                         enemy.graphics.beginFill("red").drawCircle(0,0,10)//円の中心のx座標、ｙ座標、円の半径
                         enemy.x=960
