@@ -44,6 +44,10 @@
                 }
                 count++
 
+                for(let i=0;i<enemyList.length;i++){//敵の移動
+                    enemyList[i].x-=2
+                }
+
                 stage.update()
             }
             
