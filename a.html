@@ -14,6 +14,7 @@
             let stage = new createjs.Stage("myCanvas")
             let count=0
             let enemyList=[]
+            let bulletList=[]
 
             //画面の色を作る
             let bg = new createjs.Shape()
@@ -25,8 +26,23 @@
             player.graphics.beginFill("white").drawCircle(0,0,10)
             stage.addChild(player)
 
+            stage.addEventListener("click",handleClick)//クリックした際、handleClick関数を実行
+
             createjs.Ticker.setFPS(60)//１秒間に60回の画面更新を行う
             createjs.Ticker.addEventListener("tick",handleTick);//マウスを動かす際の処理関数へ移る
+
+
+            function handleClick(){//scene=0はタイトル画面、1はゲーム画面を表す。
+                //弾を発射する処理
+                let bullet = new createjs.Shape()
+                bullet.graphics.beginFill("white").drawCircle(0,0,3)
+                bullet.x=player.x
+                bullet.y=player.y
+                bulletList.push(bullet)
+                stage.addChild(bullet)
+            }
+
+            
 
             function handleTick(){//プレイヤーの移動、敵の出現
                 player.x=stage.mouseX;
@@ -44,9 +60,9 @@
                 }
                 count++
 
-                for(let i=0;i<enemyList.length;i++){//敵の移動
-                    enemyList[i].x-=2
-                }
+                
+                for(let i=0;i<enemyList.length;i++)enemyList[i].x-=2//敵の移動
+                // for(let i=0;i<bulletList.length;i++) bulletList[i].x+=10//弾の移動
 
                 stage.update()
             }
