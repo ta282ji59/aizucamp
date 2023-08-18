@@ -17,11 +17,16 @@
             let enemyCount = 0;
             let enemyList = [];
             let scene = 0
-            let timer = 5;  // タイマーのスタート
+            let timer = 1;  // タイマーのスタート
 
-            let bgList=["un.jpg","ai.png","a.jpg","ok.jpg"]
-            let bg = new createjs.Bitmap("image/"+bgList[ Math.floor(Math.random()*4)])
-            stage.addChild(bg);
+            // let bgList=["un.jpg","ai.png","a.jpg","ok.jpg"]
+            // let bg = new createjs.Bitmap("image/"+bgList[ Math.floor(Math.random()*4)])
+            let bg_play = new createjs.Bitmap("image/back.jpeg")
+            let bg_start = new createjs.Bitmap("image/title.png")
+            let bg_fin = new createjs.Bitmap("image/result.png")
+            stage.addChild(bg_fin);
+            stage.addChild(bg_play);
+            stage.addChild(bg_start);
 
             let player = new createjs.Shape();//エイムを作る
             player.graphics.setStrokeStyle(2)
@@ -32,33 +37,34 @@
                 .moveTo(-50, 0)
                 .lineTo(50, 0);
             stage.addChild(player);
+
+
             
 
-            // Timer display setup
-            let timerDisplay = new createjs.Text("Timer: ", "20px Arial", "black");
-            timerDisplay.x = 750;  // Adjust position based on the canvas size and desired position
-            timerDisplay.y = 10;
-            stage.addChild(timerDisplay);
-
-            let titleText = new createjs.Text("ゲーム", "40px    sans-serif", "white");//タイトル画面
-            titleText.x = 480;//どの位置に表示するのか?(x)
-            titleText.y = 250;//どの位置に表示するのか?(y)
-            titleText.textAlign = "center"
-            stage.addChild(titleText);
+            // let titleText = new createjs.Text("ゲーム", "40px    sans-serif", "white");//タイトル画面
+            // titleText.x = 480;//どの位置に表示するのか?(x)
+            // titleText.y = 250;//どの位置に表示するのか?(y)
+            // titleText.textAlign = "center"
+            // stage.addChild(titleText);
 
             stage.addEventListener("click", handleClick)//クリックした際、handleClick関数を実行
 
             createjs.Ticker.setFPS(60);
             createjs.Ticker.addEventListener("tick", handleTick);
 
-
+            // Timer display setup
+            let timerDisplay = new createjs.Text("Timer: ", "20px Arial", "black");
+            timerDisplay.x = 750;  // Adjust position based on the canvas size and desired position
+            timerDisplay.y = 10;
+            stage.addChild(timerDisplay);
+           
             function handleClick() {//scene=0はタイトル画面、1はゲーム画面を表す。
                 if (scene === 0) {
                     scene = 1;
-                    stage.removeChild(titleText);
+                    // stage.removeChild(titleText);
+                    stage.removeChild(bg_start);
+                    
                 }
-                else if (scene === 1) { }
-                else if (scene === 2) { }
             }
 
             function handleTick() {
@@ -69,7 +75,7 @@
                     player.x = stage.mouseX;
                     player.y = stage.mouseY;
 
-                    if(timer<=0){
+                    if (timer <= 0) {
                         Finish();
                     }
 
@@ -77,16 +83,16 @@
                     timer -= 1 / 60;  // Increment timer by 1/60th of a second on each tick
                     timerDisplay.text = "Timer: " + timer.toFixed(1) + "s";
 
-                    if (enemyCount % 50 === 0 || enemyCount === 0 || enemyCount === 1 || enemyCount === 2) {
-                        let enemyImageList=["image/忍者雲.png","image/忍者.png","image/luffy.png"]
-                        let enemy = new createjs.Bitmap(enemyImageList[Math.floor(Math.random()*3)])
+                    if (enemyCount % 10 === 0 || enemyCount === 0 || enemyCount === 1 || enemyCount === 2) {
+                        let enemyImageList = ["image/忍者雲.png", "image/忍者.png", "image/luffy.png"]
+                        let enemy = new createjs.Bitmap(enemyImageList[Math.floor(Math.random() * 3)])
 
                         enemy.scaleX = 0.08;
                         enemy.scaleY = 0.08;
 
                         enemy.x = 900 * Math.random();
                         enemy.y = 540 * Math.random();
-                        
+
 
                         // 敵がクリックされたときのイベントリスナを追加
                         enemy.addEventListener('click', function (event) {
@@ -105,7 +111,7 @@
                         enemyList.push(enemy);
 
                         // stage.setChildIndex(enemy, 1);
-                        
+
                     }
                     enemyCount++;
 
@@ -120,9 +126,14 @@
                     stage.update();
                 }
             }
-            function Finish(){
-                scene=2
-                alert("finish")
+            function Finish() {
+                scene = 2        
+                stage.removeChild(bg_play);        
+                stage.setChildIndex(bg_fin, stage.getNumChildren() - 1); 
+                let result = new createjs.Text("aaa ", "65px Arial", "black");
+                result.x = 550;
+                result.y = 375;
+                stage.addChild(result);
             }
         }
 
