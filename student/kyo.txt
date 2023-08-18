@@ -1,0 +1,26 @@
+敵の複数の画像をランダムに表示するために配列を使った
+  let enemyImageList=["image/忍者雲.png","image/忍者.png","image/luffy.png"]
+  let enemy = new createjs.Bitmap(enemyImageList[Math.floor(Math.random()*3)])
+
+
+  enemy.x=960*Math.random();
+  enemy.y=400*Math.random();
+    
+敵の画像の大きさを変えた
+enemy.scaleX=0.16; enemy.scaleY=0.2;
+
+レチクル(自分)の真ん中に敵を倒す点が来るようにした
+player.x=stage.mouseX-55//x軸の移動
+player.y=stage.mouseY-55//y軸の移動
+
+bullet.x=player.x+55
+bullet.y=player.y+55
+
+
+
+自分を画像に変えて、大きさも変えた
+let player = new createjs.Bitmap("image/Reticle.jpg")
+player.scaleX=0.3;
+player.scaleY=0.3;
+
+玉（自分が発射するもの）の動きを消した
