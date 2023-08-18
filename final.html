@@ -12,17 +12,27 @@
     <canvas id="myCanvas" width="900" height="540" style="cursor: none;"></canvas>
 
     <script>
+        createjs.Sound.on("fileload", soundLoaded);
         createjs.Sound.registerSound("OVERTURE.mp3", "BGM");
+        createjs.Sound.registerSound("爆発3.mp3", "BGM2");
+
+
+        function soundLoaded(event) {
+            // Handle what you want to do once the sound is loaded.
+            // For now, we'll do nothing.
+        }
+        function playSound() {
+            createjs.Sound.play("BGM");
+        }
+
+        function playSound2() {
+            createjs.Sound.play("BGM2");
+        }
 
         window.addEventListener("load", init);
-
-        function playSound() {
-            createjs.Sound.on("fileload", () => {
-                createjs.Sound.play("BGM")
-            })
-        }
+        playSound()
         function init() {
-            playSound()
+
 
             let stage = new createjs.Stage("myCanvas");
             let enemyCount = 0;
@@ -74,7 +84,7 @@
                     scene = 1;
                     // stage.removeChild(titleText);
                     stage.removeChild(bg_start);
-                    createjs.Sound.stop("BGM")
+                    // createjs.Sound.stop("BGM")
 
                 }
             }
@@ -95,7 +105,7 @@
                     timer -= 1 / 60;  // Increment timer by 1/60th of a second on each tick
                     timerDisplay.text = "Timer: " + timer.toFixed(1) + "s";
 
-                    if (enemyCount % 10 === 0 || enemyCount === 0 || enemyCount === 1 || enemyCount === 2) {
+                    if (enemyCount % 100 === 0 || enemyCount === 0 || enemyCount === 1 || enemyCount === 2) {
                         // let enemyImageList = ["image/忍者雲.png", "image/忍者.png", "image/luffy.png"];
                         let enemyImageList = ["image/ninja.png", "image/luffy.png"];
                         let enemy = new createjs.Bitmap(enemyImageList[Math.floor(Math.random() * 3)]);
@@ -110,6 +120,7 @@
 
                         // 敵がクリックされたときのイベントリスナを追加
                         enemy.addEventListener('click', function (event) {
+                            playSound2()
                             // クリックされた敵をステージから削除
                             stage.removeChild(event.currentTarget);
 
