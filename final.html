@@ -19,10 +19,8 @@
             let scene = 0
             let timer = 5;  // タイマーのスタート
 
-            let bgList = ["image/ai.png", "image/gra.jpg"]
-            let bg = new createjs.Bitmap(bgList[Math.floor(Math.random() * 2)]);
-            // let bg = new createjs.Shape();
-            // bg.graphics.beginFill("aqua").drawRect(0, 0, 900, 540);
+            let bgList=["un.jpg","ai.png","a.jpg","ok.jpg"]
+            let bg = new createjs.Bitmap("image/"+bgList[ Math.floor(Math.random()*4)])
             stage.addChild(bg);
 
             let player = new createjs.Shape();//エイムを作る
@@ -80,8 +78,9 @@
                     timerDisplay.text = "Timer: " + timer.toFixed(1) + "s";
 
                     if (enemyCount % 50 === 0 || enemyCount === 0 || enemyCount === 1 || enemyCount === 2) {
-                        let enemyImageList = ["image/enemy.png", "image/ninja.png", "image/luffy.png",]
-                        let enemy = new createjs.Bitmap(enemyImageList[Math.floor(Math.random() * 3)]);
+                        let enemyImageList=["image/忍者雲.png","image/忍者.png","image/luffy.png"]
+                        let enemy = new createjs.Bitmap(enemyImageList[Math.floor(Math.random()*3)])
+
                         enemy.scaleX = 0.08;
                         enemy.scaleY = 0.08;
 
