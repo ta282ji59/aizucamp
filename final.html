@@ -39,6 +39,7 @@
             let enemyList = [];
             let scene = 0
             let timer = 30;  // タイマーのスタート
+            let scores = 0 //スコア定義0
 
             // let bgList=["un.jpg","ai.png","a.jpg","ok.jpg"]
             // let bg = new createjs.Bitmap("image/"+bgList[ Math.floor(Math.random()*4)])
@@ -114,23 +115,33 @@
                         enemy.scaleX = 0.08;
                         enemy.scaleY = 0.08;
 
-                        enemy.x = 900 * Math.random();
-                        enemy.y = 540 * Math.random();
+                        enemy.x = 450 * Math.random();
+                        enemy.y = 280 * Math.random();
 
 
                         // 敵がクリックされたときのイベントリスナを追加
+
                         enemy.addEventListener('click', function (event) {
                             playSound2()
                             // クリックされた敵をステージから削除
                             stage.removeChild(event.currentTarget);
-
+                            scores++
                             // 敵をenemyListからも削除
                             let index = enemyList.indexOf(event.currentTarget);
                             if (index !== -1) {
                                 enemyList.splice(index, 1);
                             }
-
+                            event.stopPropagation();
                         });
+                        // stage.addEventListener('click', function () {
+                        //     if (scene === 1) { // Ensure the game is currently in play scene
+                        //         sub=scores
+                        //     }
+                        //     sub-=1
+                        //     scores=sub
+                        // });
+                        console.log(scores)
+
 
                         stage.addChild(enemy);
                         enemyList.push(enemy);
@@ -140,11 +151,12 @@
                     }
                     enemyCount++;
 
+
                     // for (let i = 0; i < enemyList.length; i++) {
-                    //     enemyList[i].x += 1 * Math.random();
-                    //     enemyList[i].y += 1 * Math.random();
-                    //     enemyList[i].x -= 1 * Math.random();
-                    //     enemyList[i].y -= 1 * Math.random();
+                    //     enemyList[i].x += 7 * Math.random();
+                    //     enemyList[i].y += 7 * Math.random();
+                    //     enemyList[i].x -= 7 * Math.random();
+                    //     enemyList[i].y -= 7 * Math.random();
                     // }
 
                     // stage.setChildIndex(player, stage.getNumChildren() - 1);
@@ -155,7 +167,7 @@
                 scene = 2
                 stage.removeChild(bg_play);
                 stage.setChildIndex(bg_fin, stage.getNumChildren() - 1);
-                let result = new createjs.Text("aaa ", "65px Arial", "black");
+                let result = new createjs.Text(scores, "65px Arial", "black");
                 result.x = 550;
                 result.y = 375;
                 stage.addChild(result);
