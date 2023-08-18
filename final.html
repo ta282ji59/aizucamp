@@ -10,14 +10,25 @@
 
 <body>
     <canvas id="myCanvas" width="900" height="540" style="cursor: none;"></canvas>
+
     <script>
+        createjs.Sound.registerSound("OVERTURE.mp3", "BGM");
+
         window.addEventListener("load", init);
+
+        function playSound() {
+            createjs.Sound.on("fileload", () => {
+                createjs.Sound.play("BGM")
+            })
+        }
         function init() {
+            playSound()
+
             let stage = new createjs.Stage("myCanvas");
             let enemyCount = 0;
             let enemyList = [];
             let scene = 0
-            let timer = 1;  // タイマーのスタート
+            let timer = 30;  // タイマーのスタート
 
             // let bgList=["un.jpg","ai.png","a.jpg","ok.jpg"]
             // let bg = new createjs.Bitmap("image/"+bgList[ Math.floor(Math.random()*4)])
@@ -39,7 +50,7 @@
             stage.addChild(player);
 
 
-            
+
 
             // let titleText = new createjs.Text("ゲーム", "40px    sans-serif", "white");//タイトル画面
             // titleText.x = 480;//どの位置に表示するのか?(x)
@@ -57,13 +68,14 @@
             timerDisplay.x = 750;  // Adjust position based on the canvas size and desired position
             timerDisplay.y = 10;
             stage.addChild(timerDisplay);
-           
+
             function handleClick() {//scene=0はタイトル画面、1はゲーム画面を表す。
                 if (scene === 0) {
                     scene = 1;
                     // stage.removeChild(titleText);
                     stage.removeChild(bg_start);
-                    
+                    createjs.Sound.stop("BGM")
+
                 }
             }
 
@@ -84,8 +96,10 @@
                     timerDisplay.text = "Timer: " + timer.toFixed(1) + "s";
 
                     if (enemyCount % 10 === 0 || enemyCount === 0 || enemyCount === 1 || enemyCount === 2) {
-                        let enemyImageList = ["image/忍者雲.png", "image/忍者.png", "image/luffy.png"]
-                        let enemy = new createjs.Bitmap(enemyImageList[Math.floor(Math.random() * 3)])
+                        // let enemyImageList = ["image/忍者雲.png", "image/忍者.png", "image/luffy.png"];
+                        let enemyImageList = ["image/ninja.png", "image/luffy.png"];
+                        let enemy = new createjs.Bitmap(enemyImageList[Math.floor(Math.random() * 3)]);
+
 
                         enemy.scaleX = 0.08;
                         enemy.scaleY = 0.08;
@@ -127,9 +141,9 @@
                 }
             }
             function Finish() {
-                scene = 2        
-                stage.removeChild(bg_play);        
-                stage.setChildIndex(bg_fin, stage.getNumChildren() - 1); 
+                scene = 2
+                stage.removeChild(bg_play);
+                stage.setChildIndex(bg_fin, stage.getNumChildren() - 1);
                 let result = new createjs.Text("aaa ", "65px Arial", "black");
                 result.x = 550;
                 result.y = 375;
