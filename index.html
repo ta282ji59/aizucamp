@@ -1,131 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSゲーム</title>
     <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <title>Cグループのゲーム</title>
 </head>
-<body>
-    <canvas id="myCanvas" width="960" height="540"></canvas>
+
+<body style="background-image : url(image/back.jpg);" width="100%" height="10000px">
+    <div style="text-align: center;">
+        <h1 style="display: inline-block; background-color: aquamarine;">シューティングゲーム</h1>
+        <br>
+        <canvas id="myCanvas" width="900" height="540" style="cursor: none;"></canvas>
+        <br>
+        <div style="display: inline-block; background-color: white;">
+            <h2>遊び方</h2>
+            <p>・パソコンのマウスカーソルを使って遊びます。</p>
+            <p>・タイトル画面で記された敵が出現するのでクリックして倒しましょう</p>
+        </div>
+    </div>
     <script>
-        window.addEventListener("load",init);
-        function init(){
-            let stage = new createjs.Stage("myCanvas")
-            let count=0
-            let enemyList=[]
-            let bulletList=[]
-            let scene=0
-            let startTime = null
+        window.addEventListener("load", init);
+        createjs.Sound.on("fileload", soundLoaded);
+        createjs.Sound.registerSound("music/startmusic.mp3", "startbgm");
+        createjs.Sound.registerSound("music/mainBGM.mp3", "BGM2");
+        createjs.Sound.registerSound("music/gun1.mp3", "gun1");
+
+        function soundLoaded(event) { }
+
+        function playSound1() {//終了後のおと
+            createjs.Sound.play("startbgm");
+        }
+
+        function playSound3() {//ゲーム中音楽
+            sound3 = createjs.Sound.play("BGM2")
+            sound3.volume = 0.1
+        }
+        function playSound4() {//銃声
+            sound4 = createjs.Sound.play("gun1");
+            sound4.volume = 100
+        }
+
+        function init() {
+            let stage = new createjs.Stage("myCanvas");
+            let enemyCount = 0;
+            let enemyList = [];
+            let scene = 0
+            let timer = 60;  // タイマーのスタート:BGM都合で100以下
+            let scores = 0 //スコア定義0
+
+            let bg = new createjs.Bitmap("image/oki.png");
+            let bg2List = ["un.jpg", "ai.png"]
+            let bg2 = new createjs.Bitmap("image/" + bg2List[Math.floor(Math.random() * 2)])
+            let bg3 = new createjs.Bitmap("image/result.png")
+            stage.addChild(bg3);
+            stage.addChild(bg2);
+            stage.addChild(bg);
+
+            let wg = new createjs.Shape()
+            wg.graphics.beginFill("white").drawRect(745, 5, 130, 30)//(0,0)〜(960,540)までを黒い画面にする
+            stage.addChild(wg)
+
+            let player = new createjs.Shape();//エイムを作る
+            player.graphics.setStrokeStyle(2)
+                .beginStroke("blue")
+                .drawCircle(0, 0, 40)
+                .moveTo(0, -50)
+                .lineTo(0, 50)
+                .moveTo(-50, 0)
+                .lineTo(50, 0);
+            stage.addChild(player);
 
 
-            let bg = new createjs.Shape()
-            bg.graphics.beginFill("black").drawRect(0,0,960,540)//(0,0)〜(960,540)までを黒い画面にする
-            stage.addChild(bg)//stageにbgつまり黒い画面を入れる
-            
-            let player = new createjs.Shape()
-            player.graphics.beginFill("white").drawCircle(0,0,10)//円の中心のx座標、ｙ座標、円の半径
-            stage.addChild(player)//stageにplayerを入れる
-
-            let titleText = new createjs.Text("ゲーム", "40px	sans-serif", "white");//タイトル画面
-            titleText.x = 480;//どの位置に表示するのか?(x)
-            titleText.y = 250;//どの位置に表示するのか?(y)
-            titleText.textAlign = "center"
-            stage.addChild(titleText);
-
-            stage.addEventListener("click",handleClick)//クリックした際、handleClick関数を実行
-
-            createjs.Ticker.setFPS(60)//１秒間に60回の画面更新を行う
-            createjs.Ticker.addEventListener("tick",handleTick);
+            let timerDisplay = new createjs.Text("Timer: ", "20px Arial", "black");
+            timerDisplay.x = 750;
+            timerDisplay.y = 10;
+            stage.addChild(timerDisplay);
 
 
-            // 経過秒数を表示するテキストオブジェクト
-            let elapsedTimeText = new createjs.Text("", "20px sans-serif", "white");
-            elapsedTimeText.x = 10;
-            elapsedTimeText.y = 10;
-            stage.addChild(elapsedTimeText);
+            stage.addEventListener("click", handleClick)//クリックした際、handleClick関数を実行
 
+            createjs.Ticker.setFPS(60);
+            createjs.Ticker.addEventListener("tick", handleTick);
 
-            function handleClick(){//scene=0はタイトル画面、1はゲーム画面を表す。
+            function handleClick() {//scene=0はタイトル画面、1はゲーム画面を表す。
                 if (scene === 0) {
                     scene = 1;
-                    startTime = Date.now(); // 現在の時刻を保存
-                    stage.removeChild(titleText);
-                } 
-                else {//弾を発射する処理
-                    let bullet = new createjs.Shape()
-                    bullet.graphics.beginFill("white").drawCircle(0,0,3)
-                    bullet.x=player.x
-                    bullet.y=player.y
-                    bulletList.push(bullet)
-                    stage.addChild(bullet)
+                    stage.removeChild(bg)
                 }
-
             }
 
-            function handleTick(){//プレイヤー、敵、弾の移動処理
-                if(scene===0){
+            function handleTick() {
+                if (scene === 0) {
                     stage.update()
                 }
-                if(scene===1){
-                    updateElapsedTime();
+                else if (scene === 1) {
+                    player.x = stage.mouseX;
+                    player.y = stage.mouseY;
+                    playSound3()
 
-                    player.x=stage.mouseX//x軸の移動
-                    player.y=stage.mouseY//y軸の移動
-                    console.log(count)
-                    if(count%100===0){//countを0から∞まで増やしていき、100で割った際、あまりが０になった際に敵(enemy)を表示する
-                        
-                        let enemy = new createjs.Shape()
-                        enemy.graphics.beginFill("red").drawCircle(0,0,10)//円の中心のx座標、ｙ座標、円の半径
-                        enemy.x=960
-                        enemy.y=540*Math.random();
-    
-                        stage.addChild(enemy)
-                        enemyList.push(enemy)
-                    }
-                    count++
-    
-                    for(let i=0;i<enemyList.length;i++) enemyList[i].x-=2//敵の移動
-                    
-                    for(let i=0;i<bulletList.length;i++) bulletList[i].x+=10//弾の移動
-    
-                    for(let i=0;i<enemyList.length;i++){//プレイヤーが敵に触れてしまった(要は同じ座標上に位置してしまった)らgameoverする処理
-                        let localPoint = enemyList[i].globalToLocal(player.x,player.y)//playerの座標を取得?
-                        if(enemyList[i].hitTest(localPoint.x,localPoint.y))gameOver()//敵のいづれかに触れたらgameOver関数に移動
+
+                    timer -= 1 / 60;
+                    timerDisplay.text = "Timer: " + timer.toFixed(1) + "s";
+                    if (timer <= 0) {
+                        Finish();
                     }
 
-                    for(let i=0;i<bulletList.length;i++){//弾が敵に当たった時の処理
-                        for(let j=0;j<enemyList.length;j++){
-                            let localPoint = bulletList[i].localToLocal(0,0,enemyList[j])
-                            if(enemyList[j].hitTest(localPoint.x,localPoint.y)){
-                                stage.removeChild(bulletList[i])//ステージ上から球を消す
-                                bulletList.splice(i,1)//iにある要素を１個消す
-    
-                                stage.removeChild(enemyList[j])//ステージ上から敵を消す
-                                enemyList.splice(j,1)//iにある要素を１個消す
+
+                    if (enemyCount % 50 === 0 || enemyCount === 0 || enemyCount === 1 || enemyCount === 2) {
+                        let enemyImageList = ["image/忍者雲.png", "image/忍者.png", "image/luffy.png"]
+                        let enemy = new createjs.Bitmap(enemyImageList[Math.floor(Math.random() * 3)])
+
+                        enemy.scaleX = 0.08;
+                        enemy.scaleY = 0.08;
+
+                        enemy.x = 900 * Math.random();
+                        enemy.y = 540 * Math.random();
+
+                        // 敵がクリックされたときのイベントリスナを追加
+                        enemy.addEventListener('click', function (event) {
+                            // クリックされた敵をステージから削除
+                            stage.removeChild(event.currentTarget);
+                            scores++
+                            // 敵をenemyListからも削除
+                            let index = enemyList.indexOf(event.currentTarget);
+                            if (index !== -1) {
+                                enemyList.splice(index, 1);
+                                playSound4();
+                                createjs.sound.play("BGM2")
                             }
-                        }
+                        });
+                        stage.addChild(enemy);
+                        enemyList.push(enemy);
                     }
-    
-    
-                    stage.update()//ステージの更新
-
+                    enemyCount++;
+                    stage.update();
                 }
             }
-
-
-            function updateElapsedTime() {//ゲーム中の秒数を更新する関数
-                let elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
-                elapsedTimeText.text = elapsedSeconds + "秒";  // 経過秒数をテキストオブジェクトに設定
-            }
-                
-
-            function gameOver(){//ゲームオーバーの処理
-                alert("ゲームオーバー")
-                createjs.Ticker.removeAllEventListeners()//createjsの処理を全て消す
-                stage.removeAllEventListeners()//stageの処理を全て消す
+            function Finish() {
+                scene = 2
+                stage.removeChild(bg2)
+                stage.setChildIndex(bg3, stage.getNumChildren() - 1);
+                let scoreDisplay = new createjs.Text(scores, "65px Arial", "red")
+                scoreDisplay.x = 550//最終スコア表示座標
+                scoreDisplay.y = 370
+                stage.addChild(scoreDisplay)
+                createjs.Sound.stop("BGM2")
+                playSound1();
             }
         }
     </script>
 </body>
+
 </html>
